@@ -1,0 +1,23 @@
+{
+  "devDependencies": {
+    "@babel/preset-react": "^7.9.4",
+    "@symfony/webpack-encore": "^0.29.1",
+    "bootstrap": "^4.4.1",
+    "jquery": "^3.5.0",
+    "popper.js": "^1.16.1",
+    "webpack-notifier": "^1.8.0"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.8.7",
+    "core-js": "^3.6.5",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-charts": "^2.0.0-beta.6",
+    "react-dom": "^16.13.1"
+  },
+  "name": "xm_project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Elton Ibi <elton.ibi@channelvas.com>",
+  "license": "MIT"
+}

@@ -8,26 +8,32 @@
 
 namespace App\Components;
 
-
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 
 
-class SwiftMailer
+class ReportMailer
 {
-
-    public function sendEmail()
+    /**
+     * send email using GmailSmtpTransport
+     * @param $sender
+     * @param $receiver
+     * @param $subject
+     * @param $start_date
+     * @param $end_date
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    public function sendEmail($sender, $receiver, $subject, $start_date, $end_date)
     {
-        $transport = new GmailSmtpTransport('ibi.elton@gmail.com', '.!mynameisrex!.');
+        $transport = new GmailSmtpTransport($_ENV['SENDER_MAIL_USERNAME'], $_ENV['SENDER_MAIL_PASSWORD']);
         $mailer = new Mailer($transport);
         $email = (new Email())
-            ->from('ibi.elton@gmail.com')
-            ->to('bibizacos@hotmail.com')
-            ->subject('Time for Symfony Mailer!')
-            ->text('Sending emails is fun again!')
-            ->html('<p>See Twig integration for better HTML integration!</p>');
-
+            ->from($sender)
+            ->to($receiver)
+            ->subject($subject)
+            ->text('From ' . $start_date . ' to ' . $end_date);
+        $mailer->send($email);
     }
 
 }

@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+{% block title %}Hello XM!{% endblock %}
+{% block body %}
+    <br> <br> <br> <br> <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                {% block content_body %}
+                    {{ form_start(inputForm) }}
+                    <div class="form-group">
+                        {{ form_widget(inputForm) }}
+                    </div>
+                    <button type="submit" class="btn btn-primary float-right">Search</button
+                    {{ form_end(inputForm) }}
+                {% endblock %}
+                {% if submitted == true and displayData == true %}
+                    <br><br><br>
+                    <h6> {{ company }}</h6>
+                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                    <br>
+                    <table class="table table-dark">
+                        <thead>
+                        <tr>
+                            {% for column_name in column_name %}
+                                <th>{{ column_name }}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for data in data %}
+                            <tr>
+                                {% for data in data %}
+                                    <td>{{ data }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% elseif submitted == true and displayData == false %}
+                    <br>  <br>  <br>
+                    <div class="alert alert-primary" role="alert">
+                        Not found data
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#input_form_start_date').datepicker({
+            uiLibrary: 'bootstrap4',
+            format: 'yyyy-dd-mm',
+        });
+    </script>
+    <script>
+        $('#input_form_end_date').datepicker({
+            uiLibrary: 'bootstrap4',
+            format: 'yyyy-dd-mm',
+        });
+    </script>
+    <script>
+        window.onload = function () {
+            var options = {
+                animationEnabled: true,
+                theme: "light2",
+                title: {
+                    text: " Open/Close Prices"
+                },
+                axisY: {
+                    title: "Prices",
+                    valueFormatString: "#0",
+                    suffix: "",
+                    prefix: "$"
+                },
+                legend: {
+                    cursor: "pointer",
+                    itemclick: toogleDataSeries
+                },
+                toolTip: {
+                    shared: true
+                },
+                data: [{
+                    type: "area",
+                    name: "Close",
+                    markerSize: 5,
+                    showInLegend: true,
+                    xValueFormatString: "MMMM",
+                    yValueFormatString: "$#0",
+                    dataPoints: [
+                        {{ closePrices }}
+                    ]
+                }, {
+                    type: "area",
+                    name: "Open",
+                    markerSize: 5,
+                    showInLegend: true,
+                    yValueFormatString: "$#0K",
+                    dataPoints: [
+                        {{ openPrices }}
+                    ]
+                }]
+            };
+            $("#chartContainer").CanvasJSChart(options);
+
+            function toogleDataSeries(e) {
+                if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                    e.dataSeries.visible = false;
+                } else {
+                    e.dataSeries.visible = true;
+                }
+                e.chart.render();
+            }
+        }
+    </script>
+{% endblock %}

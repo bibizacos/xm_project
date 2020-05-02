@@ -16,14 +16,27 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 
-class QuandlDataCollector
+class QuandlDataProvider
 {
 
-
-    public function search($symbol=null, $start_date=null, $end_date=null, $api_key=null)
+    /**
+     * retrieve data from quandl API
+     * @param null $symbol
+     * @param null $start_date
+     * @param null $end_date
+     * @param $api_key
+     * @return Quandl|array|object
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
+    public function search($symbol, $start_date, $end_date)
     {
         $client = HttpClient::create();
-        $response = $client->request('GET', 'https://www.quandl.com/api/v3/datasets/WIKI/'.$symbol.'.json?order=asc&start_date='.$start_date.'&end_date='.$end_date.'&api_key='.$api_key.'');
+        $response = $client->request('GET', $_ENV['API_URL'].$symbol.'.json?order=asc&start_date='.$start_date.'&end_date='.$end_date.'&api_key='.$_ENV['API_KEY'].'');
         $statusCode = $response->getStatusCode();
         if ($statusCode == 200) {
             $normalizer = new ObjectNormalizer(null, null, null, new ReflectionExtractor());
